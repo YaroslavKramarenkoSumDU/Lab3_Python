@@ -68,6 +68,83 @@ def max_func(country_list):
   print(f"\nКраїна з максимальною щільністю населення: {max_country}")
   print(f"Щільність: {max_val:.2f} осіб/кв. км")
 
+#Левченко. Завдання 1. Сортування країн за площею та населенням за спаданням
+def sort_by_param(country_list):
+    if not country_list:
+        print("Список порожній.")
+        return
+
+    print("\nВиберіть параметр для сортування (за спаданням): ")
+    print("1 - За населенням.")
+    print("2 - За площею.")
+    param_choice = input("Ваш вибір: ").strip()
+
+    if param_choice == '1':
+        key_param = 'population'
+        label = 'населенням'
+    elif param_choice == '2':
+        key_param = 'area'
+        label = 'площею'
+    else: 
+        print("Некоректний вибір.")
+        return
+
+    sorted_countries = sorted(country_list.items(), key = lambda item: item[1][key_param], reverse=True)
+    
+    print(f"\nКраїни, які були відсортовані за {label} (у порядку спадання): ")
+    for country, data in sorted_countries:
+        print(f"\nКраїна: {country}. Населення: {data['population']} млн; площа: {data['area']} тис. кв. км")
+
+
+#Левченко. Завдання 2. Пошук країн за населенням/площею (більше/менше за число).
+def filter_by_param(country_list):
+    if not country_list:
+        print("Список порожній.")
+        return
+    print("\nВиберіть параметр для пошуку: ")
+    print("1 - Населення (млн).")
+    print("2 - Площа (тис. кв. км.)")
+    param_choice = input("Ваш вибір: ").strip()
+
+    if param_choice == '1':
+        key_param = 'population'
+        label = 'населенням'
+        unit = "млн."
+    elif param_choice == '2':
+        key_param = 'area'
+        label = 'площею'
+        unit = "тис. кв. км."
+    else: 
+        print("Некоректний вибір.")
+        return
+
+    print("\nВиберіть умову для пошуку: ")
+    print("1 - Більше за значення ( > ).")
+    print("2 - Менше за значення ( < ) ")
+    cond_choice = input("Ваш вибір: ").strip()
+
+    if cond_choice not in ['1', '2']:
+        print("Некоректний вибір умови.")
+        return
+
+    try:
+        threshold = float(input(f"Введіть порогове значення ({unit}): "))
+    except ValueError:
+        print("Помилка. Значення має бути числом.")
+        return
+
+    found = False
+    conditional_label = "більше" if cond_choice == '1' else "менше"
+    print(f"\nРезультати пошуку за {label} ({conditional_label}) за {threshold} {unit}:")
+
+    for country, data in country_list.items():
+        val = data[key_param]
+        if (cond_choice == '1' and val > threshold) or (cond_choice == '2' and val < threshold):
+            print(f"\nКраїна: {country}. Населення: {data['population']} млн; площа: {data['area']} тис. кв. км")
+            found = True
+    if not found:
+        print("Країн, що відповідають вказаним критеріям, не знайдено.")
+
 # Діалогове вікно
 while True:
   print("Якщо бажаєте вивести усі дані в словнику, тоді натисніть 1")
@@ -75,6 +152,8 @@ while True:
   print("Якщо бажаєте видалити дані в словнику, тоді натисніть 3")
   print("Якщо бажаєте переглянути відсотртований вміст, тоді натисніть 4")
   print("Якщо бажаєте визначити країну з максимальною щильністю, тоді натисніть 5")
+  print("Якщо бажаєте відсортувати країни за населенням/площею ЗА СПАДАННЯМ, тоді натисніть 6")
+  print("Якщо бажаєте знайти країни з населенням/площею (більше/менше), тоді натисніть 7")
   print("Якщо бажаєте вийти з програми, тоді натисніть 0")
 
   choice = input("Введіть пункт меню: ").strip()
@@ -89,6 +168,10 @@ while True:
     print_sort(country_list)
   elif choice == '5':
     max_func(country_list)
+  elif choice == '6':
+    sort_by_param(country_list)
+  elif choice == '7':
+    filter_by_param(country_list)
   elif choice == '0':
     print("Роботу програми завершено.")
     break
