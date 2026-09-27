@@ -1,10 +1,10 @@
-﻿country_list = {"Ukraine": {"population": 41.2, "area": 603.7}, "Germany": {"population": 83.2, "area": 357},
+country_list = {"Ukraine": {"population": 41.2, "area": 603.7}, "Germany": {"population": 83.2, "area": 357},
                 "France": {"population": 67.8, "area": 551.7}, "Italy": {"population": 59, "area": 301.3},
                 "Japan": {"population": 125.7, "area": 377.9}, "UK": {"population": 67.3, "area": 242.5}
                 }
 
 # Функція для виведення всього списку країн
-def print_coutry(country_list):
+def print_country(country_list):
   print("\nСписок усіх країн")
   if not country_list:
     print("Словник порожній.")
@@ -36,10 +36,18 @@ def add(country_list):
 # Функція для видалення країни зі словника
 def delete(country_list):
   key = input("Введіть назву країни для видалення: ").strip()
-  try:
-    del country_list[key]
-    print(f"Видалено {key}.")
-  except KeyError:
+  key_lower = key.lower()
+  
+  target_key = None
+  for k in country_list:
+    if k.lower() == key_lower:
+      target_key = k
+      break
+
+  if target_key:
+    del country_list[target_key]
+    print(f"Видалено {target_key}.")
+  else:
     print(f"Помилка! Країну '{key}' не знайдено у словнику!")
 
 # Функція для виведення країн, відсортованих за назвою (за алфавітом)
@@ -209,7 +217,7 @@ while True:
   choice = input("Введіть пункт меню: ").strip()
 
   if choice == '1':
-    print_coutry(country_list)
+    print_country(country_list)
   elif choice == '2':
     add(country_list)
   elif choice == '3':
