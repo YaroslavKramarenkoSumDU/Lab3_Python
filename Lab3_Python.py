@@ -145,6 +145,54 @@ def filter_by_param(country_list):
     if not found:
         print("Країн, що відповідають вказаним критеріям, не знайдено.")
 
+# Швачич. Завдання 1. Редагування даних існуючої країни
+def edit_country(country_list):
+    key = input("Введіть назву країни для редагування.").strip()
+    if key not in country_list:
+        print(f"Помилка. Країну '{key}' не знайдено у словнику.")
+        return
+    
+    print(f"Поточні дані для {key}: Населення: {country_list[key]['population']} млн, площа: {country_list[key]['area']} тис. кв. км")
+    try:
+        pop_input = input("Введіть нове населення (в млн.) або натисніть Enter, щоб залишити без змін.").strip()
+        area_input = input("Введіть нову площу (в тис. кв. км) або натисніть Enter, щоб залишити без змін.").strip()
+        
+        if pop_input:
+            pop = float(pop_input)
+            if pop <= 0:
+                print("Помилка. Населення не може бути меншим або рівним 0.")
+                return
+            country_list[key]['population'] = pop
+            
+        if area_input:
+            area = float(area_input)
+            if area <= 0:
+                print("Помилка. Площа не може бути меншою або рівною 0.")
+                return
+            country_list[key]['area'] = area
+            
+        print(f"Дані для країни '{key}' успішно оновлено!")
+    except ValueError:
+        print("Населення та площа повинні бути числами.")
+
+# Швачич. Завдання 2. Пошук країни з мінімальною щільністю населення
+def min_density_func(country_list):
+    if not country_list:
+        print("Словник порожній, неможливо порахувати щільність.")
+        return
+
+    min_country = None
+    min_val = float('inf')
+
+    for country, data in country_list.items():
+        density = (data["population"] / data["area"]) * 1000
+        if density < min_val:
+            min_val = density
+            min_country = country
+
+    print(f"\nКраїна з мінімальною щільністю населення: {min_country}")
+    print(f"Щільність: {min_val:.2f} осіб/кв. км")
+
 # Діалогове вікно
 while True:
   print("Якщо бажаєте вивести усі дані в словнику, тоді натисніть 1")
@@ -154,6 +202,8 @@ while True:
   print("Якщо бажаєте визначити країну з максимальною щильністю, тоді натисніть 5")
   print("Якщо бажаєте відсортувати країни за населенням/площею ЗА СПАДАННЯМ, тоді натисніть 6")
   print("Якщо бажаєте знайти країни з населенням/площею (більше/менше), тоді натисніть 7")
+  print("Якщо бажаєте відредагувати дані існуючої країни, тоді натисніть 8")
+  print("Якщо бажаєте визначити країну з мінімальною щільністю, тоді натисніть 9")
   print("Якщо бажаєте вийти з програми, тоді натисніть 0")
 
   choice = input("Введіть пункт меню: ").strip()
@@ -172,6 +222,10 @@ while True:
     sort_by_param(country_list)
   elif choice == '7':
     filter_by_param(country_list)
+  elif choice == '8':
+    edit_country(country_list)
+  elif choice == '9':
+    min_density_func(country_list)
   elif choice == '0':
     print("Роботу програми завершено.")
     break
